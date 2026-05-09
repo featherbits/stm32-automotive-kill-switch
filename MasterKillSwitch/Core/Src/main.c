@@ -59,18 +59,29 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+
+void startPowerOffSequence(void)
+{
+  // signal external system that we are powering off
+  HAL_GPIO_WritePin(ShutDown_GPIO_Port, ShutDown_Pin, GPIO_PIN_SET);
+  // start master relay power off countdown
+  HAL_TIM_Base_Start_IT(&htim2);
+}
+
 void HAL_GPIO_EXTI_Falling_Callback(uint16_t GPIO_Pin)
 {
-  switch (GPIO_Pin) {
-    case SlavePushBtn_Pin:
-    case MasterPushBtn_Pin:
-    // signal external system that we are powering off
-    HAL_GPIO_WritePin(ShutDown_GPIO_Port, ShutDown_Pin, GPIO_PIN_SET);
-    // start master relay power off countdown
-    __HAL_TIM_DISABLE_IT(&htim2, TIM_IT_UPDATE);
-    break;
+  if (GPIO_Pin == SlavePushBtn_Pin) {
+    startPowerOffSequence();
   }
 }
+
+void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
+{
+  if (GPIO_Pin == MasterPushBtn_Pin) {
+    startPowerOffSequence();
+  }
+}
+
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
   if (htim->Instance == TIM2)
