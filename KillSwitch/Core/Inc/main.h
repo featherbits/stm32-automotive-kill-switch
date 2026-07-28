@@ -27,7 +27,7 @@ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32g0xx_hal.h"
+#include "stm32c0xx_hal.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -57,16 +57,18 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define MasterBtnSns_Pin GPIO_PIN_4
-#define MasterBtnSns_GPIO_Port GPIOA
-#define MasterBtnSns_EXTI_IRQn EXTI4_15_IRQn
-#define SlaveBtnSns_Pin GPIO_PIN_5
-#define SlaveBtnSns_GPIO_Port GPIOA
-#define SlaveBtnSns_EXTI_IRQn EXTI4_15_IRQn
-#define PowerEnable_Pin GPIO_PIN_6
-#define PowerEnable_GPIO_Port GPIOA
-#define PoweringOff_Pin GPIO_PIN_7
-#define PoweringOff_GPIO_Port GPIOA
+#define KillSwitchSense_Pin GPIO_PIN_2
+#define KillSwitchSense_GPIO_Port GPIOA
+#define KillSwitchSense_EXTI_IRQn EXTI2_3_IRQn
+#define PowerSignalSense_Pin GPIO_PIN_3
+#define PowerSignalSense_GPIO_Port GPIOA
+#define PowerSignalSense_EXTI_IRQn EXTI2_3_IRQn
+#define MCUPowerSignal_Pin GPIO_PIN_4
+#define MCUPowerSignal_GPIO_Port GPIOA
+#define OutputPowerSignal_Pin GPIO_PIN_8
+#define OutputPowerSignal_GPIO_Port GPIOA
+#define ShutdownSignal_Pin GPIO_PIN_6
+#define ShutdownSignal_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
 

@@ -1,0 +1,14 @@
+BasedOnStyle: Google
+ColumnLimit: 80
+IndentWidth: 4
+BinPackArguments: false
+BinPackParameters: false
+AlignAfterOpenBracket: false
+BreakAfterOpenBracketFunction: true
+BreakBeforeCloseBracketFunction: true
+BreakBeforeBinaryOperators: All
+BreakBeforeBraces: Allman
+AlignOperands: DontAlign
+ContinuationIndentWidth: 4
+BreakBinaryOperations: RespectPrecedence
+AllowAllParametersOfDeclarationOnNextLine: false
