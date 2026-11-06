@@ -57,18 +57,16 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define KillSwitchSense_Pin GPIO_PIN_2
-#define KillSwitchSense_GPIO_Port GPIOA
-#define KillSwitchSense_EXTI_IRQn EXTI2_3_IRQn
-#define PowerSignalSense_Pin GPIO_PIN_3
-#define PowerSignalSense_GPIO_Port GPIOA
-#define PowerSignalSense_EXTI_IRQn EXTI2_3_IRQn
-#define MCUPowerSignal_Pin GPIO_PIN_4
-#define MCUPowerSignal_GPIO_Port GPIOA
-#define OutputPowerSignal_Pin GPIO_PIN_8
-#define OutputPowerSignal_GPIO_Port GPIOA
-#define ShutdownSignal_Pin GPIO_PIN_6
-#define ShutdownSignal_GPIO_Port GPIOB
+#define PowerSignalMCU_Pin GPIO_PIN_3
+#define PowerSignalMCU_GPIO_Port GPIOA
+#define SecondaryPowerEnable_Pin GPIO_PIN_4
+#define SecondaryPowerEnable_GPIO_Port GPIOA
+#define PrimaryPowerEnable_Pin GPIO_PIN_5
+#define PrimaryPowerEnable_GPIO_Port GPIOA
+#define PowerSignalExternalSense_Pin GPIO_PIN_12
+#define PowerSignalExternalSense_GPIO_Port GPIOA
+#define KillSwitchSense_Pin GPIO_PIN_6
+#define KillSwitchSense_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
 
