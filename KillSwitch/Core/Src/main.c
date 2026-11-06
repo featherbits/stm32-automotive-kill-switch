@@ -50,8 +50,12 @@ typedef enum PowerSignal
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-
 /* USER CODE BEGIN PV */
+
+// delay in microseconds until primary output is turned off
+const uint32_t delayUntilShutDown = 1000 * 1000 * 2;  // 2 seconds
+
+const bool isPowerEnableSwitchMomentary = true;
 
 /* USER CODE END PV */
 
@@ -63,11 +67,6 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
-// delay in microseconds before master relay power output gets disabled
-const uint32_t delayBeforePoweringOff = 1000 * 1000 * 2;  // 2 seconds
-
-const bool isPowerEnableSwitchMomentary = true;
 
 bool powerOffTriggered = false;
 
@@ -84,13 +83,6 @@ void setPrimaryOutput(PowerSignal state)
         PrimaryPowerEnable_GPIO_Port,
         PrimaryPowerEnable_Pin,
         (GPIO_PinState)state
-    );
-}
-
-PowerSignal getPrimaryOutput(void)
-{
-    return (PowerSignal)HAL_GPIO_ReadPin(
-        PrimaryPowerEnable_GPIO_Port, PrimaryPowerEnable_Pin
     );
 }
 
@@ -121,28 +113,28 @@ void startPowerOffSequence(void)
     // signal external system that we are powering off
     setSecondaryOutput(ON);
 
-    // start master relay power off countdown
+    // start power off countdown
     HAL_TIM_Base_Start_IT(&htim2);
+}
+
+void onShutdownPeriodElapsed(void)
+{
+    // turn off the primary output
+    setPrimaryOutput(OFF);
+    // and then power off the board
+    setMCUPower(OFF);
 }
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim)
 {
+    // shutdown period elapsed
     if (htim->Instance == TIM2)
     {
-        setPrimaryOutput(OFF);
-        setMCUPower(OFF);
+        onShutdownPeriodElapsed();
     }
 }
 
 void onKillSwitchOn(void) { startPowerOffSequence(); }
-
-// void onPowerSwitchOn(void)
-// {
-//     if (isPowerEnableSwitchMomentary)
-//     {
-//         startPowerOffSequence();
-//     }
-// }
 
 void onPowerSwitchOff(void) { startPowerOffSequence(); }
 
@@ -207,7 +199,7 @@ int main(void)
     MX_TIM2_Init();
     /* USER CODE BEGIN 2 */
 
-    __HAL_TIM_SET_COUNTER(&htim2, delayBeforePoweringOff);
+    __HAL_TIM_SET_COUNTER(&htim2, delayUntilShutDown);
 
     // allow RC network to settle before reading switch states
     HAL_Delay(100);
