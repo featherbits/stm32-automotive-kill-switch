@@ -20,7 +20,6 @@
 #include "main.h"
 
 #include "gpio.h"
-#include "stm32c0xx_hal_gpio.h"
 #include "tim.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -50,6 +49,7 @@ typedef enum PowerSignal
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
+
 /* USER CODE BEGIN PV */
 
 // delay in microseconds until primary output is turned off
@@ -69,6 +69,7 @@ void SystemClock_Config(void);
 /* USER CODE BEGIN 0 */
 
 bool powerOffTriggered = false;
+bool ready = false;
 
 void setMCUPower(PowerSignal state)
 {
@@ -106,7 +107,7 @@ PowerSignal getKillSwitchSignal(void)
 void startPowerOffSequence(void)
 {
     // already powering off, ignoring this call..
-    if (powerOffTriggered) return;
+    if (!ready || powerOffTriggered) return;
 
     powerOffTriggered = true;
 
@@ -119,10 +120,9 @@ void startPowerOffSequence(void)
 
 void onShutdownPeriodElapsed(void)
 {
-    // turn off the primary output
     setPrimaryOutput(OFF);
-    // and then power off the board
     setMCUPower(OFF);
+    setSecondaryOutput(OFF);
 }
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim)
@@ -182,9 +182,7 @@ int main(void)
     HAL_Init();
 
     /* USER CODE BEGIN Init */
-    // in order to block all interrupt handlers for switches
-    // simply disable all interrupts
-    __disable_irq();
+
     /* USER CODE END Init */
 
     /* Configure the system clock */
@@ -214,7 +212,7 @@ int main(void)
     // at this point we are good to go
     // start power on sequence
 
-    __enable_irq();
+    ready = true;
 
     // keep board powered by signal from MCU
     setMCUPower(ON);

@@ -65,8 +65,10 @@ void Error_Handler(void);
 #define PrimaryPowerEnable_GPIO_Port GPIOA
 #define PowerSignalExternalSense_Pin GPIO_PIN_12
 #define PowerSignalExternalSense_GPIO_Port GPIOA
+#define PowerSignalExternalSense_EXTI_IRQn EXTI4_15_IRQn
 #define KillSwitchSense_Pin GPIO_PIN_6
 #define KillSwitchSense_GPIO_Port GPIOB
+#define KillSwitchSense_EXTI_IRQn EXTI4_15_IRQn
 
 /* USER CODE BEGIN Private defines */
 

@@ -61,7 +61,7 @@ void MX_GPIO_Init(void)
   /*Configure GPIO pin : PowerSignalExternalSense_Pin */
   GPIO_InitStruct.Pin = PowerSignalExternalSense_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(PowerSignalExternalSense_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : KillSwitchSense_Pin */
@@ -69,6 +69,10 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(KillSwitchSense_GPIO_Port, &GPIO_InitStruct);
+
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI4_15_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI4_15_IRQn);
 
 }
 
